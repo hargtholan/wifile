@@ -67,6 +67,7 @@ class WiFiScanner
         bssid_info.time = time
         @bssid[bssid] = bssid_info.dup  # Save previous bssid info.
         bssid = $'.chop                 # Set current bssid.
+        bssid_info.enc = "OPN"
       elsif line =~ /ESSID:\"/
         bssid_info.essid = $'.chop.chop
         next
@@ -82,19 +83,29 @@ class WiFiScanner
         $' =~ /Channel\s/
         bssid_info.channel = $'.chop.chop
         next
-        #elsif ( line =~ /Bit Rates:/) 
-        #elsif ( line =~ /Encryption\skey:/)
-        #elsif ( line =~ /Bit\sRates:/)
-      elsif line =~ /Quality=/
+      elsif  line =~ /Encryption\skey:on/
+        bssid_info.enc = "WEP"
+        next
+      elsif line =~ /Quality/
         $' =~ /\d+/
         bssid_info.quality = $&
         next
+     elsif line =~ /WPA\sVesrion\s1/
+        bssid_info.enc = "WPA"
+        next
+      elsif line =~ /WPA2/
+        bssid_info.enc = "WPA2"
+        next
+      elsif line =~ /TKIP/
+        bssid_info.cipher = "TKIP"
+        next
+      elsif line =~ /CCMP/
+        bssid_info.cipher = "CCMP"
+        next
+      elsif line =~ /PSK/
+        bssid_info.auth = "PSK"
+        next
       end
-
-      #bssid_info.enc = # OPN, WEP, WPA, WPA2
-      #bssid_info.ciper = # CCMP, WEP, TKIP
-      #bssid_info.auth = # PSK, nil...
-
     end
     bssid_info.time = time
     @bssid[bssid] = bssid_info.dup # Save the last Cell found.
