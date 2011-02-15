@@ -64,18 +64,4 @@ end
 f = File.open("oui.txt", "rb")
 o = OuiTable.new
 o.parse(f)
-puts o.whois("00:23:F8:83:56:66")
-puts o.whois("00:17:3F:89:4A:89")
-puts o.whois("4C:ED:DE:02:71:52")
-puts o.whois("7C:C5:37:11:3B:4C")
-puts o.whois("F8:DB:7F:72:11:C0")
-puts o.whois("00:25:D3:D8:A8:3F")
 
-r = o.grep_organization(/Nokia/)
-r.each_pair { |oui, organization| print "#{oui} => "; puts organization}
-
-puts "---------"
-
-r = o.grep_organization(/Apple/)
-r.each_pair { |oui, organization| print "#{oui} => "; puts organization}
-#o.display

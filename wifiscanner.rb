@@ -20,7 +20,6 @@
 
 require 'ostruct'
 
-
 def query_channels(iface = "wlan0")
   freq_table = Hash.new
   channels = IO.popen("iwlist #{iface} channel")
@@ -125,4 +124,3 @@ s = WiFiScanner.new
 s.scan("wlan0")
 s.p
 puts query_channels("wlan0")[1]
-
