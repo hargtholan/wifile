@@ -57,8 +57,7 @@ class WiFiScanner
     parse_scanning(scan, time)
   end
 
-  
-  #TODO: What if a BSSID has changed (essid, channel, enc) since last scan?
+
   def parse_scanning(input, time = Time.now)
     bssid_info = OpenStruct.new
     bssid = "nil"                       # First time we save a nil entry.
@@ -68,6 +67,8 @@ class WiFiScanner
         @bssid[bssid] = bssid_info.dup  # Save previous bssid info.
         bssid = $'.chop                 # Set current bssid.
         bssid_info.enc = "OPN"
+        bssid_info.cipher = ""
+        bssid_info.auth = ""
       elsif line =~ /ESSID:\"/
         bssid_info.essid = $'.chop.chop
         next
@@ -90,7 +91,7 @@ class WiFiScanner
         $' =~ /\d+/
         bssid_info.quality = $&
         next
-     elsif line =~ /WPA\sVesrion\s1/
+     elsif line =~ /WPA\sVersion\s1/
         bssid_info.enc = "WPA"
         next
       elsif line =~ /WPA2/
@@ -134,4 +135,4 @@ end
 s = WiFiScanner.new
 s.scan("wlan0")
 s.p
-puts query_channels("wlan0")[1]
+
